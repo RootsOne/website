@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html * {
+  @apply font-proxima duration-300
+}
+
+[x-cloak] { display: none !important; }
+
+/* Syntax Highlighting*/
+body :not(pre) > code[class*='language-'],
+body pre[class*='language-'] {
+  @apply bg-gray-800;
+}
+
+#gradient {
+  --tw-gradient-from: #064e3b5c;
+  --tw-gradient-to: #064e3b00;
+  --tw-gradient-stops: var(--tw-gradient-from), #0000009c;
+}
+
+.black-shape-bg {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    160deg,
+    transparent 60%,
+    black 60%
+  );
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}

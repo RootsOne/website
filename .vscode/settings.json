@@ -1,0 +1,17 @@
+{
+    "tailwindCSS.experimental.classRegex": [
+
+    ],
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    "npm.packageManager": "yarn",
+    "i18n-ally.localesPaths": [
+        "../../../../projets/LaaTech/laahtech/locales"
+    ],
+    "i18n-ally.keystyle": "nested"
+    
+}
