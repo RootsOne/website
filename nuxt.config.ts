@@ -13,9 +13,16 @@ export default defineNuxtConfig({
     '@nuxtjs/google-fonts',
     '@vueuse/nuxt',
     '@nuxt/image',
+    'nuxt-svgo'
   ],
+  svgo: {
+    autoImportPath: './assets/icons/',
+    fontControlled: false,
+    customComponent: 'SVGO',
+    componentPrefix: 'svg',
+  },
   i18n: {
-    locales: ['en', 'fr', 'de'],
+    locales: ['en', 'fr'],
     defaultLocale: 'en',
     vueI18n: './i18n.config.ts',
   },
