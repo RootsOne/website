@@ -3,17 +3,17 @@
         <div class="pt-6 pb-16 flex flex-wrap justify-around">
             <div class="w-full md:w-3/5 self-end pb-10 order-2 md:order-1 pt-10 md:pt-0">
                 <h1 class="text-4xl md:text-6xl font-extrabold flex flex-col">
-                    <span class="text-primary staggared">
+                    <span class="text-primary staggered">
                         {{ $t('about_hero_title_1') }} <br>
                         {{ $t('about_hero_title_2') }}
                     </span>
                 </h1>
-                <p class="text-gray-500 text-xl pt-6 staggared">
+                <p class="text-gray-500 text-xl pt-6 staggered">
                     {{ $t('about_description') }}
                 </p>
                 <div class="pt-10 flex">
                     <NuxtLink :to="localePath('about') + '#contact_us'"
-                        class="text-white bg-secondary py-3 px-5 justify-center items-center rounded-lg staggared">
+                        class="text-white bg-secondary py-3 px-5 justify-center items-center rounded-lg staggered">
                         {{ $t('join_the_revolution') }}
                     </NuxtLink>
                 </div>
@@ -137,7 +137,7 @@
 <script setup lang="ts">
 import { EnvelopeIcon, MapPinIcon, PhoneArrowUpRightIcon } from '@heroicons/vue/24/outline';
 import { animate, stagger, timeline } from "motion";
-import { inView, heroInView } from '../utils';
+import { inView, heroInView } from '../lib/utils';
 
 
 const localePath = useLocalePath();
@@ -162,7 +162,7 @@ inView([features11, features21], ({ target }) => {
                 { at: 0, duration: 0.9, easing: [0.17, 0.55, 0.55, 1] }
             ],
             [
-                target.querySelectorAll('.staggared'),
+                target.querySelectorAll('.staggered'),
                 { opacity: [0, 1], transform: ['translateY(50px)', 'none'] },
                 { at: 0.5, delay: stagger(0.1, { start: 0 }), duration: 0.5, easing: [0.17, 0.55, 0.55, 1] }
             ],
@@ -182,7 +182,7 @@ inView([features12, features22], ({ target }) => {
                 { at: 0, duration: 0.9, easing: [0.17, 0.55, 0.55, 1] }
             ],
             [
-                target.querySelectorAll('.staggared'),
+                target.querySelectorAll('.staggered'),
                 { opacity: [0, 1], transform: ['translateY(50px)', 'none'] },
                 { at: 0.5, delay: stagger(0.1, { start: 0 }), duration: 0.5, easing: [0.17, 0.55, 0.55, 1] }
             ],
@@ -193,5 +193,4 @@ inView([features12, features22], ({ target }) => {
     threshold: 0.5,
 });
 </script>
-<style>
-</style>
+<style></style>

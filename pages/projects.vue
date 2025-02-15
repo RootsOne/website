@@ -3,16 +3,16 @@
         <div class="pt-6 pb-16 flex flex-wrap justify-around">
             <div class="w-full md:w-1/2 self-end pb-10 order-2 md:order-1 pt-10 md:pt-0">
                 <h1 class="text-4xl md:text-6xl font-extrabold flex flex-col">
-                    <span class="text-sky-300 staggared">
+                    <span class="text-sky-300 staggered">
                         {{ $t('over_20_years') }}
                     </span>
                 </h1>
-                <p class="text-gray-500 text-xl pt-6 staggared">
+                <p class="text-gray-500 text-xl pt-6 staggered">
                     {{ $t('projects_description_detail') }}
                 </p>
                 <div class="pt-10 flex">
                     <NuxtLink :to="localePath('about') + '#contact_us'"
-                        class="text-white bg-secondary py-3 px-5 justify-center items-center rounded-lg staggared">
+                        class="text-white bg-secondary py-3 px-5 justify-center items-center rounded-lg staggered">
                         {{ $t('join_the_revolution') }}
                     </NuxtLink>
                 </div>
@@ -47,8 +47,8 @@
                 'https://source.unsplash.com/random/?football',
             ]" :gap="16">
                 <template #default="{ item, index }">
-                    <img loading="lazy" class="w-auto h-auto rounded-lg shadow cursor-pointer" :src="item" alt="" srcset=""
-                        @click="showItemDetails(item)" />
+                    <img loading="lazy" class="w-auto h-auto rounded-lg shadow cursor-pointer" :src="item" alt=""
+                        srcset="" @click="showItemDetails(item)" />
                 </template>
             </masonry-wall>
         </div>
@@ -117,7 +117,7 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue';
-import { inView, heroInView } from '../utils';
+import { inView, heroInView } from '../lib/utils';
 
 const localePath = useLocalePath();
 const emit = defineEmits<{
@@ -139,5 +139,4 @@ function closeModal() {
 }
 
 </script>
-<style>
-</style>
+<style></style>

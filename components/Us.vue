@@ -1,9 +1,10 @@
 <template>
     <section ref="scrollContainer"
         class="h-full max-h-full text-white body-font w-full max-w-full flex pt-6 sm:pt-20 lg:pt-8 overflow-x-scroll no-scrollbar pb-10 sm:pb-0"
-        @mousewheel.stop="onWheel">
-        <GlobalEvents v-if="activeSection === 'us'" @keydown.up="scroll(-100)" @keydown.left="scroll(-100)"
-            @keydown.down="scroll(100)" @keydown.right="scroll(100)" target="window" />
+        @wheel.stop="handleScroll($event, { prev: async (event) => scrolled(event), next: async (event) => scrolled(event), axis: ['x'] })">
+        <GlobalEvents v-if="activeSection === 'us'" @keydown.up="scrollXByY($event)" @keydown.left="scrollXByY($event)"
+            @wheel="handleScroll($event, { prev: async (event) => scrollXByY(event), next: async (event) => scrollXByY(event), axis: ['y'] })"
+            @keydown.down="scrollXByY($event)" @keydown.right="scrollXByY($event)" target="window" />
         <div class="shrink-0 flex flex-col lg:flex-row max-w-full pl-6 sm:pl-8 md:pl-12 lg:pl-0 pr-4 sm:pr-0 ">
             <div id="about" ref="about" class="pl-4 lg:pl-4 sm:flex-shrink-0 maw-x-full">
                 <SvgLogoFull class="w-64 sm:w-80 xl:w-96 h-auto mb-4 relative lg:static -left-10 sm:-left-20 -z-10" />
@@ -15,17 +16,21 @@
             <div
                 class="pt-10 lg:pt-10 lg:pl-10 2xl:pl-16 text-sm sm:text-base md:text-lg xl:text-xl font-normal text-white w-full max-w-md sm:max-w-lg xl:max-w-2xl sm:flex-shrink-0">
                 <p>
-                    We are a Digital Agency Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non elementum
+                    We are a Digital Agency Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur non
+                    elementum
                     ligula.
-                    Praesent cursus nunc mollis blandit iaculis. Quisque vulputate, ligula eget blandit convallis, sapien
+                    Praesent cursus nunc mollis blandit iaculis. Quisque vulputate, ligula eget blandit convallis,
+                    sapien
                     quam
-                    ultricies ante, sit amet luctus lacus urna sit amet dolor. Quisque aliquet massa quis mattis lobortis.
+                    ultricies ante, sit amet luctus lacus urna sit amet dolor. Quisque aliquet massa quis mattis
+                    lobortis.
                     Curabitur
-                    laoreet varius turpis, a molestie tortor porta eget. Mauris aliquet sagittis volutpat. Cras a purus eget
+                    laoreet varius turpis, a molestie tortor porta eget. Mauris aliquet sagittis volutpat. Cras a purus
+                    eget
                     sem
                     porta tincidunt.
                 </p>
-                <h6 class="text-white text-base 2xl:text-lg font-bold pt-5 pb-3 uppercase">
+                <h6 class="text-white text-base 2xl:text-lg font-bold pt-16 pb-3 uppercase">
                     partners
                 </h6>
                 <p></p>
@@ -71,22 +76,45 @@
     </section>
 </template>
 <script setup lang="ts">
+import { useScroll } from '@vueuse/core';
 import { GlobalEvents } from 'vue-global-events'
+import { handleScroll, Navigation } from '~/lib/utils';
 
 const props = defineProps<{
     activeSection: string,
     activeTarget?: string,
 }>();
-
 const scrollContainer = ref(null);
-const { x } = useScroll(scrollContainer);
-const onWheel = (event: WheelEvent) => {
-    scroll(event.deltaY);
+const { x, arrivedState, isScrolling } = useScroll(scrollContainer);
+const { left, right, top, bottom } = toRefs(arrivedState)
+const scrollXByY = (event: Event) => {
+    x.value += event instanceof WheelEvent ? event.deltaY : 0;
+    scrolled(event);
 }
-const scroll = (offset: number) => {
-    console.log(x.value);
-    x.value += offset;
+
+let willNavigate = false;
+const scrolled = (event?: Event) => {
+    if (!willNavigate && event instanceof WheelEvent) {
+        if (right.value && (event.deltaY > 0 || event.deltaX > 0)) {
+            willNavigate = true;
+        } else if (left.value && (event.deltaY < 0 || event.deltaX < 0)) {
+            willNavigate = true;
+        }
+        return;
+    }
+
+    if (willNavigate && right.value) {
+        willNavigate = false;
+        Navigation.next();
+    } else if (willNavigate && left.value) {
+        willNavigate = false;
+        Navigation.prev();
+    } else {
+        willNavigate = false;
+        return;
+    }
 }
+
 const contact = ref(null);
 const about = ref(null);
 const members = [

@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug Nuxt 3 (Vite)",
+        "type": "chrome",
+        "request": "launch",
+        "url": "http://localhost:3000",
+        "webRoot": "${workspaceFolder}",
+        "breakOnLoad": true,
+        "sourceMapPathOverrides": {
+          "webpack://_N_E/*": "${webRoot}/*",
+          "webpack://./*": "${webRoot}/*"
+        }
+      }
+    ]
+  }
+  

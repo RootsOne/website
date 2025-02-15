@@ -12,6 +12,11 @@
     "i18n-ally.localesPaths": [
         "../../../../projets/LaaTech/laahtech/locales"
     ],
-    "i18n-ally.keystyle": "nested"
+    "i18n-ally.keystyle": "nested",
+    "cSpell.words": [
+        "Triggerable",
+        "unfill",
+        "vueuse"
+    ]
     
 }

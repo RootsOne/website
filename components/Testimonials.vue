@@ -1,19 +1,20 @@
 <template>
     <div class="testimonials container mx-auto flex flex-wrap px-4 md:px-0 justify-around">
         <div class="w-full md:w-1/2 max-w-lg description" ref="description">
-            <h4 class="text-pink-600 font-semibold uppercase text-base staggared">
+            <h4 class="text-pink-600 font-semibold uppercase text-base staggered">
                 {{ $t('sucess_stories') }}
             </h4>
-            <h2 class="font-extrabold flex flex-col text-sky-300 text-4xl pt-1 staggared">
+            <h2 class="font-extrabold flex flex-col text-sky-300 text-4xl pt-1 staggered">
                 {{ $t('take_a_look_at_results') }}
             </h2>
-            <p class="text-gray-500 text-xl pt-4 pb-8 border-b border-gray-200 staggared">
+            <p class="text-gray-500 text-xl pt-4 pb-8 border-b border-gray-200 staggered">
                 {{ $t('sucess_stories_description') }}
             </p>
         </div>
-        <div class="w-full md:w-1/2 max-w-2xl md:pl-10 flex justify-center items-center pt-10 md:pt-0 items" ref="items">
+        <div class="w-full md:w-1/2 max-w-2xl md:pl-10 flex justify-center items-center pt-10 md:pt-0 items"
+            ref="items">
             <ul class="w-full flex flex-wrap space-y-8 md:space-y-0">
-                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 staggared">
+                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 staggered">
                     <div
                         class="w-full h-96 md:h-72 rounded-lg shadow-lg relative group transition-all duration-1000 bg-cover bg-center bg-[url('https://synergy-learning.com/wp-content/uploads/2020/07/Amazon-Case-Study-Image-343x350.jpg')]">
                         <div class="bg-black bg-opacity-10 h-full w-full relative text-white rounded-lg">
@@ -29,7 +30,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 md:pt-16 staggared">
+                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 md:pt-16 staggered">
                     <div
                         class="w-full h-96 md:h-72 rounded-lg shadow-lg relative group transition-all duration-1000 bg-cover bg-center bg-[url('https://synergy-learning.com/wp-content/uploads/2020/07/Amazon-Case-Study-Image-343x350.jpg')]">
                         <div class="bg-black bg-opacity-10 h-full w-full relative text-white rounded-lg">
@@ -45,7 +46,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 staggared">
+                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 staggered">
                     <div
                         class="w-full h-96 md:h-72 rounded-lg shadow-lg relative group transition-all duration-1000 bg-cover bg-center bg-[url('https://synergy-learning.com/wp-content/uploads/2020/07/Amazon-Case-Study-Image-343x350.jpg')]">
                         <div class="bg-black bg-opacity-10 h-full w-full relative text-white rounded-lg">
@@ -61,7 +62,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 md:pt-16 staggared">
+                <li class="w-full md:w-1/2 max-w-sm mx-auto md:mx-0 px-4 md:pt-16 staggered">
                     <div
                         class="w-full h-96 md:h-72 rounded-lg shadow-lg relative group transition-all duration-1000 bg-cover bg-center bg-[url('https://synergy-learning.com/wp-content/uploads/2020/07/Amazon-Case-Study-Image-343x350.jpg')]">
                         <div class="bg-black bg-opacity-10 h-full w-full relative text-white rounded-lg">
@@ -83,7 +84,7 @@
 </template>
 <script setup lang="ts">
 import { animate, stagger, timeline } from "motion";
-import { inView } from '../utils';
+import { inView } from '../lib/utils';
 import { useWindowSize } from '@vueuse/core'
 
 const { width, height } = useWindowSize();
@@ -95,7 +96,7 @@ inView(description, ({ target }) => {
     timeline(
         [
             [
-                target.querySelectorAll('.staggared'),
+                target.querySelectorAll('.staggered'),
                 { opacity: [0, 1], transform: ['translateY(100px)', 'none'] },
                 { at: 0, delay: stagger(0.2, { start: 0 }), duration: 0.9, easing: [0.17, 0.55, 0.55, 1] }
             ],
@@ -110,7 +111,7 @@ inView(items, ({ target }) => {
     timeline(
         [
             [
-                target.querySelectorAll('li.staggared'),
+                target.querySelectorAll('li.staggered'),
                 { opacity: [0, 1], transform: ['translateY(100px)', 'none'] },
                 { at: 0, delay: stagger(0.2, { start: 0 }), duration: 0.9, easing: [0.17, 0.55, 0.55, 1] }
             ],

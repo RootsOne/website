@@ -9,8 +9,9 @@
                     <div class="w-fit flex-shrink-0">
                         <Swiper id="service-items" ref="serviceItems"
                             class="w-full flex-shrink-0 flex flex-wrap lg:flex-col justify-between lg:justify-start lg:items-start lg:space-y-6 2xl:space-y-10"
-                            :navigation="false" :modules="modules" direction="vertical" :slides-per-view="services.length"
-                            :loop="true" @swiper="setThumbsSwiper" watch-slides-progress>
+                            :navigation="false" :modules="modules" direction="vertical"
+                            :slides-per-view="services.length" :loop="true" @swiper="setThumbsSwiper"
+                            watch-slides-progress>
                             <SwiperSlide v-for="(service, index) in services"
                                 class="colorable [--thumbs-color:theme(colors.gray.50)] text-[--thumbs-color] hover:[--thumbs-color:theme(colors.yellow.500)] flex flex-col lg:flex-row lg:flex-nowrap items-center w-1/2 sm:w-1/3 lg:w-auto lg:py-4 flex-shrink-0 mb-7 sm:mb-0 cursor-pointer duration-200 transition-all">
                                 <component :is="service.iconSmall"
@@ -33,13 +34,17 @@
                             </svg>
                         </a>
                     </div>
-                    <div @mousewheel.stop="">
-                        <Swiper id="service-list" ref="serviceList" :navigation="false" :mousewheel="true" effect="flip"
-                            :thumbs="{ swiper: thumbsSwiper }" :modules="modules" @slideChange="onSlideChange"
-                            @swiper="onSwiperinit" @reachEnd="onEnd" :init="false" class="w-full max-w-full xl:max-w-2xl">
+                    <div @wheel.stop="handleScroll">
+                        <Swiper id="service-list" ref="serviceList" :speed="600" :navigation="false" :mousewheel="{
+                            thresholdDelta: 0, // Minimum delta before scrolling
+                            thresholdTime: 1200, // Minimum time between scrolls
+                            // releaseOnEdges: true,
+                        }" effect="flip" :thumbs="{ swiper: thumbsSwiper }" :modules="modules"
+                            @slideChange="onSlideChange" @swiper="onSwiperInit" @reachEnd="onEnd" :init="false"
+                            class="w-full max-w-full xl:max-w-2xl custom-swiper">
                             <SwiperSlide v-for="(service, index) in services" class="pl-10 bg-transparent">
                                 <ServiceDetail :title="service.title" :desc='service.description'>
-                                    <component :is="service.iconLarge" class="w-80 animateable" />
+                                    <component :is="service.iconLarge" class="w-80 animatable" />
                                 </ServiceDetail>
                             </SwiperSlide>
                         </Swiper>
@@ -49,7 +54,8 @@
                     <div class="w-full flex-shrink-0 max-w-xs pb-14 relative lg:-left-full">
                         <h3 class="text-3xl text-white font-extrabold mb-3">Stay Cool !</h3>
                         <p class="text-lg text-gray-50">
-                            Loro ipsum dolor sit amet, consectetur adipiscing elit. Mauris risus massa, venenatis quis lacus
+                            Loro ipsum dolor sit amet, consectetur adipiscing elit. Mauris risus massa, venenatis quis
+                            lacus
                             vel, dapibus viverra neque.
                         </p>
                     </div>
@@ -60,7 +66,7 @@
     </section>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Swiper as SwiperClass } from 'swiper';
 import { Thumbs, Mousewheel } from 'swiper/modules';
@@ -69,6 +75,7 @@ import 'swiper/css';
 import 'swiper/css/effect-flip';
 import { animate } from "motion"
 import Vivus from 'vivus';
+import { handleScroll as coreHandleScroll, Navigation } from '~/lib/utils';
 
 const props = defineProps<{
     activeSection: string,
@@ -84,10 +91,10 @@ const mainSwiper = ref<SwiperClass>();
 const setThumbsSwiper = (swiper: SwiperClass) => {
     thumbsSwiper.value = swiper;
 };
-const onSwiperinit = (swiper: SwiperClass) => {
+const onSwiperInit = (swiper: SwiperClass) => {
     console.log('init');
     mainSwiper.value = swiper;
-    window.swiper = swiper;
+    // window.swiper = swiper;
     onSlideChange(swiper);
 };
 const fill = (svg: HTMLElement) => {
@@ -111,14 +118,38 @@ const unfill = (svg: HTMLElement) => {
     })
     return true;
 };
+
 let vivus: Vivus | undefined = undefined;
+let willNavigate = false;
+let onLastSlide = 0;
+let onFirstSlide = 1;
+
+const handleScroll = (event: WheelEvent) => {
+    coreHandleScroll(event, {
+        prev: !onFirstSlide || onFirstSlide++ == 1 ? async () => { } : null,
+        next: !onLastSlide || onLastSlide++ == 1 ? async () => { } : null,
+        axis: ['y']
+    });
+}
+
 const onSlideChange = (swiper: SwiperClass) => {
+    if (swiper.realIndex != swiper.slides.length - 1) {
+        onLastSlide = 0;
+    }
+    if (swiper.realIndex == 0) {
+        onFirstSlide = 1;
+    }
+    else if (swiper.realIndex > 0) {
+        onFirstSlide = 0;
+    }
+
+
     if (vivus) {
         vivus.finish();
         vivus.destroy();
         unfill(vivus.el)
     }
-    const svg = swiper.slides[swiper.realIndex]?.querySelector('svg.animateable') as HTMLElement
+    const svg = swiper.slides[swiper.realIndex]?.querySelector('svg.animatable') as HTMLElement
     if (svg) {
         vivus = new Vivus(
             svg,
@@ -131,19 +162,22 @@ const onSlideChange = (swiper: SwiperClass) => {
 };
 
 const onEnd = (swiper: SwiperClass) => {
-    console.log('end');
+    setTimeout(() => {
+        onLastSlide++;
+    }, 1000);
 };
 
-if (props.activeSection === 'services') {
-    mainSwiper.value?.init();
-}
+
 
 onMounted(() => {
-    mainSwiper.value?.init();
 });
 
 onUpdated(() => {
     mainSwiper.value?.init();
+    if (mainSwiper.value) {
+        mainSwiper.value.update();
+        onSwiperInit(mainSwiper.value);
+    }
 });
 
 const services = [
@@ -193,5 +227,10 @@ const services = [
 
 .colorable.swiper-slide-thumb-active {
     --thumbs-color: theme('colors.yellow.600');
+}
+
+/* Custom easing */
+.custom-swiper .swiper-wrapper {
+    transition-timing-function: ease-in-out !important;
 }
 </style>

@@ -23,38 +23,18 @@
 <script setup lang="ts">
 import * as THREE from "three";
 import WAVES from "vanta/dist/vanta.waves.min";
-import { watchTriggerable } from '@vueuse/core';
-import { useUrlSearchParams } from '@vueuse/core'
+import { trigger, activeSection, activeTarget } from "./lib/utils";
+
+trigger();
 
 /* Declare element refs */
+const bg = ref(null);
 const home = ref(null);
 const why = ref(null);
 const services = ref(null);
 const portfolio = ref(null);
 const us = ref(null);
 
-const activeSection = ref('home');
-const activeTarget = ref('');
-const params = useUrlSearchParams('hash-params')
-const { trigger, ignoreUpdates } = watchTriggerable(
-  params,
-  onHashChange,
-);
-function onHashChange(params) {
-  if (activeSection.value !== params.section) {
-    activeSection.value = params.section || 'home';
-  }
-  if (params.target) {
-    activeTarget.value = params.target;
-    const target = document.getElementById(params.target);
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth' });
-    }
-  }
-}
-trigger();
-
-const bg = ref(null);
 onMounted(() => {
   window.THREE = THREE;
   WAVES({
@@ -83,7 +63,7 @@ onMounted(() => {
   @apply font-proxima duration-300
 }
 
-.staggared,
+.staggered,
 .one,
 .two,
 .slides,

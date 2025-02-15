@@ -12,7 +12,6 @@ export default defineNuxtConfig({
     '@nuxtjs/i18n',
     '@nuxtjs/google-fonts',
     '@vueuse/nuxt',
-    '@nuxt/image',
     'nuxt-svgo'
   ],
   svgo: {
