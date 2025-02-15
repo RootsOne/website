@@ -1,5 +1,5 @@
 <template>
-    <section
+    <section @wheel.stop="handleScroll"
         class=" h-full max-h-full text-white body-font lg:bg-dark-shape pb-10 lg:pb-0 px-8 sm:px-9 lg:px-10 2xl:px-12 lg:pt-8 xl:pt-6">
         <div class="h-full w-full max-w-screen-xl mx-auto flex flex-col justify-center items-center">
             <Heading title="services" desc="" />
@@ -34,12 +34,13 @@
                             </svg>
                         </a>
                     </div>
-                    <div @wheel.stop="handleScroll">
-                        <Swiper id="service-list" ref="serviceList" :speed="600" :navigation="false" :mousewheel="{
-                            thresholdDelta: 0, // Minimum delta before scrolling
-                            thresholdTime: 1200, // Minimum time between scrolls
-                            // releaseOnEdges: true,
-                        }" effect="flip" :thumbs="{ swiper: thumbsSwiper }" :modules="modules"
+                    <div>
+                        <Swiper id="service-list" ref="serviceList" :speed="600" :navigation="false" @wheel.stop=""
+                            :mousewheel="{
+                                thresholdDelta: 0, // Minimum delta before scrolling
+                                thresholdTime: 1200, // Minimum time between scrolls
+                                // releaseOnEdges: true,
+                            }" effect="flip" :thumbs="{ swiper: thumbsSwiper }" :modules="modules"
                             @slideChange="onSlideChange" @swiper="onSwiperInit" @reachEnd="onEnd" :init="false"
                             class="w-full max-w-full xl:max-w-2xl custom-swiper">
                             <SwiperSlide v-for="(service, index) in services" class="pl-10 bg-transparent">
@@ -126,8 +127,8 @@ let onFirstSlide = 1;
 
 const handleScroll = (event: WheelEvent) => {
     coreHandleScroll(event, {
-        prev: !onFirstSlide || onFirstSlide++ == 1 ? async () => { } : null,
-        next: !onLastSlide || onLastSlide++ == 1 ? async () => { } : null,
+        prev: !onFirstSlide || onFirstSlide++ == 1 ? async () => { mainSwiper.value?.slidePrev() } : null,
+        next: !onLastSlide || onLastSlide++ == 1 ? async () => { mainSwiper.value?.slideNext() } : null,
         axis: ['y']
     });
 }
@@ -164,7 +165,7 @@ const onSlideChange = (swiper: SwiperClass) => {
 const onEnd = (swiper: SwiperClass) => {
     setTimeout(() => {
         onLastSlide++;
-    }, 1000);
+    }, 1);
 };
 
 

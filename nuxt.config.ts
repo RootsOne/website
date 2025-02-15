@@ -31,5 +31,4 @@ export default defineNuxtConfig({
     },
     base64: true
   },
-  image: {},
 })
